@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import { HomePage} from '../features/MovieDetails/pages';
+import { HomePage} from '../features/Home/pages';
 
 export const AppRouter = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -22,7 +23,7 @@ export const Navbar = () => {
             <div
                 className={`
                     flex flex-nowrap items-center pl-6 sm:pl-8 md:pl-10 px-4 py-2
-                    space-x-2 sm:space-x-4 rounded-full
+                    space-x-4 rounded-full
                     transition-all duration-300 ease-in-out transform
                     text-xs sm:text-sm md:text-base
                     ${scrolled
@@ -31,6 +32,28 @@ export const Navbar = () => {
                     }
                 `}
             >
+                {/* Logo como imagen */}
+                <Link to="/">
+                    <img
+                        src="/logo.png"
+                        alt="FilmHub"
+                        className="max-h-5 w-auto object-contain"
+                    />
+                </Link>
+
+                {/* Enlaces */}
+                <Link to="/" className="hover:underline">
+                    Home
+                </Link>
+                <Link to="/series" className="hover:underline">
+                    Series
+                </Link>
+                <Link to="/movies" className="hover:underline">
+                    Movies
+                </Link>
+                <Link to="/movies" className="hover:underline">
+                    Anime
+                </Link>
             </div>
         </nav>
     );
