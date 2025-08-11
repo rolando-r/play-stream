@@ -35,7 +35,7 @@ export const Navbar = () => {
                 {/* Logo como imagen */}
                 <Link to="/">
                     <img
-                        src="/logo.png"
+                        src="/logo.webp"
                         alt="FilmHub"
                         className="max-h-5 w-auto object-contain"
                     />
