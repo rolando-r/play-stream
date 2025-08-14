@@ -1,5 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:wght@600&display=swap");
 @import "tailwindcss";
 
-html {
-  @apply bg-[#000] text-white;
+@layer base {
+  html {
+    @apply bg-[#000] text-white;
+    font-family: "Montserrat", sans-serif;
+  }
 }

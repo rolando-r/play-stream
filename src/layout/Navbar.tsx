@@ -22,7 +22,7 @@ export const Navbar = () => {
                     <img
                         src="/logo.webp"
                         alt="FilmHub"
-                        className="max-h-5 w-auto object-contain"
+                        className="max-h-20 w-auto object-contain"
                     />
                 </Link>
 
@@ -44,7 +44,7 @@ export const Navbar = () => {
                     <img
                         src="/search.svg"
                         alt="search"
-                        className="max-h-5 w-auto object-contain"
+                        className="h-6 w-6 object-contain"
                     />
                 </Link>
             </div>
