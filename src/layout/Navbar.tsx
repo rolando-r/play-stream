@@ -1,42 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
-import { useRef, useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { menuItems } from "../config/menuItems";
+import { useActiveIndicator } from "../hooks/useActiveIndicator";
 
 export const Navbar = () => {
-  const location = useLocation();
-  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties | null>(null);
-  const menuRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-
-  const menuItems = [
-    { path: "/", label: "Home" },
-    { path: "/series", label: "Series" },
-    { path: "/movies", label: "Movies" },
-    { path: "/anime", label: "Anime" },
-  ];
-
-  useLayoutEffect(() => {
-    const updateIndicator = () => {
-      const activeIndex = menuItems.findIndex(
-        (item) => item.path === location.pathname
-      );
-      const activeEl = menuRefs.current[activeIndex];
-      if (activeEl) {
-        setIndicatorStyle({
-          width: activeEl.offsetWidth,
-          left: activeEl.offsetLeft,
-        });
-      }
-    };
-
-    updateIndicator();
-    window.addEventListener("load", updateIndicator);
-    return () => window.removeEventListener("load", updateIndicator);
-  }, [location.pathname]);
+  const { indicatorStyle, menuRefs, location } = useActiveIndicator(menuItems);
 
   return (
-    <nav
-      className="fixed top-0 left-0 w-full flex justify-center p-2"
-      style={{ zIndex: 1000 }}
-    >
+    <nav className="fixed top-0 left-0 w-full flex justify-center p-2 z-[1000]">
       <div className="flex items-center justify-between py-2 w-full max-w-[95%] mx-auto">
         {/* Logo */}
         <div className="flex justify-center items-center">
@@ -67,7 +37,6 @@ export const Navbar = () => {
               {label}
             </Link>
           ))}
-          {/* Sliding line */}
           {indicatorStyle && (
             <span
               className="absolute bottom-0 h-[2px] bg-white transition-all duration-300 ease-in-out"
