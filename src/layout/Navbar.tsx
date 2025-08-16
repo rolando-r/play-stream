@@ -22,11 +22,10 @@ export const Navbar = () => {
   return (
     <div
       className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-300 ${
-        scrolled
-          ? "bg-black/70"
-          : "bg-gradient-to-b from-black via-black/80 to-transparent"
+        scrolled ? "bg-black/70" : ""
       }`}
     >
+      <div className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-b from-black via-black/80 to-transparent"></div>
       <nav className="flex justify-center p-2">
         <div className="flex items-center justify-between py-2 w-full max-w-[95%] mx-auto">
           {/* Logo */}
