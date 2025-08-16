@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getMovieDetailsWithLogos } from "../services/tmdbApi";
+import { getMovieDetailsWithLogos } from "../services";
 import { FaInfoCircle, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { useScreenSize, useVideoZoom, useYouTubePlayer } from "../hooks/";
 

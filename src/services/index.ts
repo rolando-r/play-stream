@@ -1,1 +1,1 @@
-export { getMovieById } from './tmdbApi';
+export { getMovieDetailsWithLogos } from './tmdbApi';
