@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { menuItems } from "../config/menuItems";
-import { useActiveIndicator } from "../hooks/useActiveIndicator";
+import { useActiveIndicator } from "../hooks";
 
 export const Navbar = () => {
   const { indicatorStyle, menuRefs, location } = useActiveIndicator(menuItems);
