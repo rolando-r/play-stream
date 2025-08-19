@@ -9,3 +9,7 @@ export { usePopularMovies } from './usePopularMovies';
 export { usePopularSeries } from './usePopularSeries';
 export { usePopularAnimes } from './usePopularAnimes';
 export { useTrending } from './useTrending';
+export { useCarouselScroll } from './useCarouselScroll';
+export { useFilteredPopularMovies } from './useFilteredPopularMovies';
+export { useFilteredPopularSeries } from './useFilteredPopularSeries';
+export { useFilteredPopularAnimes } from './useFilteredPopularAnimes';
