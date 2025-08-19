@@ -3,14 +3,21 @@ export interface Genre {
   name: string;
 }
 
-export interface Serie {
+export interface MediaItem {
   id: number;
-  name: string;
+
+  // Películas
+  title?: string;
+  release_date?: string;
+  runtime?: number;
+
+  // Series
+  name?: string;
+  first_air_date?: string;
+  episode_run_time?: number[];
+
   overview: string;
   vote_average: number;
-  first_air_date: string;
-  number_of_episodes: number;
-  number_of_seasons: number;
   poster_path: string;
   backdrop_path: string;
   genres: Genre[];

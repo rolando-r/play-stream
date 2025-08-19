@@ -14,36 +14,39 @@ export const getMovieTrailer = async (movieId: number) => {
   return { movie, trailerKey: trailer ? trailer.key : null };
 };
 
-export const getMovieDetailsWithLogos = async (movieId: number) => {
+export const getDetailsWithLogos = async (id: number, type: "movie" | "tv") => {
   try {
-    const [movieRes, videoRes, imagesRes, releaseRes] = await Promise.all([
-      fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US`),
-      fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`),
-      fetch(`${BASE_URL}/movie/${movieId}/images?api_key=${API_KEY}`),
-      fetch(`${BASE_URL}/movie/${movieId}/release_dates?api_key=${API_KEY}`),
+    const [detailsRes, videosRes, imagesRes] = await Promise.all([
+      fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}&language=en-US`),
+      fetch(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}&language=en-US`),
+      fetch(`${BASE_URL}/${type}/${id}/images?api_key=${API_KEY}`),
     ]);
 
-    const movie = await movieRes.json();
-    const videos = await videoRes.json();
+    const details = await detailsRes.json();
+    const videos = await videosRes.json();
     const images = await imagesRes.json();
-    const releaseDates = await releaseRes.json();
 
-    const trailer = videos.results.find(
-      (vid: any) => vid.type === "Trailer" && vid.site === "YouTube"
-    );
+    const trailerKey =
+      videos.results?.find((v: any) => v.type === "Trailer" && v.site === "YouTube")?.key ?? null;
 
-    const logo = images.logos?.find((logo: any) => logo.iso_639_1 === "en") || images.logos?.[0];
-    movie.logo_path = logo?.file_path || null;
+    const logo =
+      images.logos?.find((l: any) => l.iso_639_1 === "en")?.file_path ||
+      images.logos?.find((l: any) => l.iso_639_1 === null)?.file_path ||
+      null;
 
-    const certificationData = releaseDates.results.find((r: any) => r.iso_3166_1 === "US");
-    const certification = certificationData?.release_dates?.[0]?.certification || "";
-
-    return { movie, trailerKey: trailer ? trailer.key : null, certification };
+    return {
+      item: {
+        ...details,
+        logo_path: logo,
+      },
+      trailerKey,
+    };
   } catch (error) {
-    console.error(error);
+    console.error(`Error fetching ${type} details:`, error);
     return null;
   }
 };
+
 
 export const getTrending = async () => {
   try {

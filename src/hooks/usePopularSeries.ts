@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPopularSeries } from "../services";
-import type { Serie } from "../types/Serie";
+import type { MediaItem } from "../types/MediaItem";
 
 export const usePopularSeries = (limit: number = 5) => {
   const [seriesIds, setSeriesIds] = useState<number[]>([]);
@@ -12,7 +12,7 @@ export const usePopularSeries = (limit: number = 5) => {
 
     const fetchMovies = async () => {
       try {
-        const series: Serie[] = await getPopularSeries();
+        const series: MediaItem[] = await getPopularSeries();
         if (isMounted) {
           setSeriesIds(series.slice(0, limit).map((s) => s.id));
         }

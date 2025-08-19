@@ -1,4 +1,4 @@
-export { getMovieDetailsWithLogos } from './tmdbApi';
+export { getDetailsWithLogos } from './tmdbApi';
 export { getPopularMovies } from './tmdbApi';
 export { getPopularSeries } from './tmdbApi';
 export { getPopularAnime } from './tmdbApi';

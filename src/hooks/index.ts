@@ -4,7 +4,7 @@ export { useVideoZoom } from './useVideoZoom';
 export { useYouTubePlayer } from './useYoutubePlayer';
 export { useVideoProgress } from './useVideoProgress';
 export { useCarousel } from './useCarousel';
-export { useMoviesWithTrailers } from './useMoviesWithTrailers';
+export { useContentWithTrailers } from './useContentWithTrailers';
 export { usePopularMovies } from './usePopularMovies';
 export { usePopularSeries } from './usePopularSeries';
 export { usePopularAnimes } from './usePopularAnimes';

@@ -11,14 +11,17 @@ export const useVideoProgress = (
 
     const interval = setInterval(() => {
       const currentTime = playerRef.current?.getCurrentTime?.();
-      if (currentTime && duration) {
+
+      if (typeof currentTime === "number" && duration > 0) {
         const percentage = (currentTime / duration) * 100;
         setProgress(percentage);
 
-        if (percentage >= 99) handleNext();
+        if (percentage >= 99) {
+          handleNext();
+        }
       }
-    }, 200);
+    }, 500);
 
     return () => clearInterval(interval);
-  }, [duration, playerRef, handleNext, setProgress]);
+  }, [playerRef, duration, setProgress, handleNext]);
 };

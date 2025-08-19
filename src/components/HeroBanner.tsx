@@ -11,16 +11,17 @@ import {
   useVideoZoom,
   useYouTubePlayer,
   useCarousel,
-  useMoviesWithTrailers,
+  useContentWithTrailers,
   useVideoProgress,
 } from "../hooks";
 
 interface HeroBannerProps {
-  movieIds: number[];
+  ids: number[];
+  mediaType: "movie" | "tv";
 }
 
-export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
-  const { movies, trailers } = useMoviesWithTrailers(movieIds);
+export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
+  const { items, trailers } = useContentWithTrailers(ids, mediaType);
   const {
     currentIndex,
     setCurrentIndex,
@@ -28,7 +29,7 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
     setProgress,
     handleNext,
     handlePrev,
-  } = useCarousel(movieIds.length);
+  } = useCarousel(ids.length);
 
   const [isMuted, setIsMuted] = useState(true);
 
@@ -52,17 +53,17 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
   const truncateText = (text: string, maxLength: number) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
-  const movieData = movies[currentIndex];
+  const data = items[currentIndex];
 
   return (
     <section className="relative w-full h-screen overflow-hidden group">
       {/* Background */}
       <div className="absolute top-0 left-0 w-full h-full">
-        {movieData && (
+        {data && (
           <img
             className="w-full h-full object-cover absolute top-0 left-0"
-            src={`https://image.tmdb.org/t/p/original${movieData.backdrop_path}`}
-            alt={movieData.title}
+            src={`https://image.tmdb.org/t/p/original${data.backdrop_path}`}
+            alt={data.title || data.name}
             loading="lazy"
             style={{
               opacity: isVideoReady ? 0 : 1,
@@ -93,7 +94,7 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
       {/* Arrows */}
       <button
         onClick={handlePrev}
-        aria-label="Previous movie"
+        aria-label="Previous"
         className="absolute left-0 top-1/2 -translate-y-1/2 
              text-zinc-400 hover:text-white 
              p-3 rounded-full 
@@ -104,7 +105,7 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
       </button>
       <button
         onClick={handleNext}
-        aria-label="Next movie"
+        aria-label="Next"
         className="absolute right-0 top-1/2 -translate-y-1/2 
              text-zinc-400 hover:text-white 
              p-3 rounded-full 
@@ -115,26 +116,33 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
       </button>
 
       {/* Interface */}
-      {movieData && (
+      {data && (
         <div className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-10 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg text-center sm:text-left flex flex-col items-center sm:items-start">
-          {movieData.logo_path && (
+          {data.logo_path && (
             <img
-              src={`https://image.tmdb.org/t/p/original${movieData.logo_path}`}
-              alt={movieData.title}
+              src={`https://image.tmdb.org/t/p/original${data.logo_path}`}
+              alt={data.title || data.name}
               className="max-h-20 sm:max-h-32 w-auto mb-3 sm:mb-4"
               loading="lazy"
             />
           )}
           <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 text-xs sm:text-sm">
-            <span>{new Date(movieData.release_date).getFullYear()}</span>
-            {movieData.adult !== undefined && (
+            <span>
+              {(() => {
+                const dateStr = data.release_date || data.first_air_date;
+                if (!dateStr) return "N/A";
+                const year = new Date(dateStr).getFullYear();
+                return isNaN(year) ? "N/A" : year;
+              })()}
+            </span>
+            {data.adult !== undefined && (
               <span className="border px-1 sm:px-2 py-0.5 text-[10px] sm:text-sm rounded">
-                {movieData.adult ? "18+" : "PG-13"}
+                {data.adult ? "18+" : "PG-13"}
               </span>
             )}
           </div>
           <p className="text-[12px] sm:text-sm leading-relaxed sm:leading-relaxed">
-            {truncateText(movieData.overview, 250)}
+            {truncateText(data.overview, 250)}
           </p>
           <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-5">
             <button className="px-4 sm:px-6 py-1 sm:py-2 bg-white text-black font-bold rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-300 text-xs sm:text-sm">
@@ -149,10 +157,10 @@ export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
 
       {/* Indicators */}
       <div className="absolute bottom-5 w-full flex justify-center gap-3">
-        {movieIds.map((_, i) => (
+        {ids.map((_, i) => (
           <button
             key={i}
-            aria-label={`Go to movie ${i + 1}`}
+            aria-label={`Go to item ${i + 1}`}
             className="w-5 h-5 rounded-full relative flex items-center justify-center"
             onClick={() => setCurrentIndex(i)}
           >

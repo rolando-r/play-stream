@@ -22,7 +22,7 @@ export const AnimePage = () => {
 
   return (
     <div>
-      <HeroBanner movieIds={animeIds} />
+      <HeroBanner ids={animeIds} mediaType="tv" />
     </div>
   );
 };

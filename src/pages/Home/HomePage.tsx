@@ -22,7 +22,7 @@ export const HomePage = () => {
 
   return (
     <div>
-      <HeroBanner movieIds={movieIds} />
+      <HeroBanner ids={movieIds} mediaType="movie" />
     </div>
   );
 };

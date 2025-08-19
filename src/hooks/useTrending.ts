@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTrending } from "../services";
-import type { Movie } from "../types/Movie";
+import type { MediaItem } from "../types/MediaItem";
 
 export const useTrending= (limit: number = 5) => {
   const [movieIds, setMovieIds] = useState<number[]>([]);
@@ -12,7 +12,7 @@ export const useTrending= (limit: number = 5) => {
 
     const fetchMovies = async () => {
       try {
-        const movies: Movie[] = await getTrending();
+        const movies: MediaItem[] = await getTrending();
         if (isMounted) {
           setMovieIds(movies.slice(0, limit).map((m) => m.id));
         }
