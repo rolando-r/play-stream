@@ -2,3 +2,7 @@ export { useActiveIndicator } from './useActiveIndicator';
 export { useScreenSize } from './useScreenSize';
 export { useVideoZoom } from './useVideoZoom';
 export { useYouTubePlayer } from './useYoutubePlayer';
+export { useVideoProgress } from './useVideoProgress';
+export { useCarousel } from './useCarousel';
+export { useMoviesWithTrailers } from './useMoviesWithTrailers';
+export { usePopularMovies } from './usePopularMovies';

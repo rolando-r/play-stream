@@ -44,3 +44,14 @@ export const getMovieDetailsWithLogos = async (movieId: number) => {
     return null;
   }
 };
+
+export const getPopularMovies = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching popular movies:", error);
+    return [];
+  }
+};

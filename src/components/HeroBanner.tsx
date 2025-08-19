@@ -1,45 +1,61 @@
-import { useState, useEffect } from "react";
-import { getMovieDetailsWithLogos } from "../services";
-import { FaInfoCircle, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { useScreenSize, useVideoZoom, useYouTubePlayer } from "../hooks/";
+import { useState } from "react";
+import {
+  FaInfoCircle,
+  FaVolumeUp,
+  FaVolumeMute,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import {
+  useScreenSize,
+  useVideoZoom,
+  useYouTubePlayer,
+  useCarousel,
+  useMoviesWithTrailers,
+  useVideoProgress,
+} from "../hooks";
 
 interface HeroBannerProps {
-  movieId: number;
+  movieIds: number[];
 }
 
-export const HeroBanner = ({ movieId }: HeroBannerProps) => {
-  const [movieData, setMovieData] = useState<any>(null);
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+export const HeroBanner = ({ movieIds }: HeroBannerProps) => {
+  const { movies, trailers } = useMoviesWithTrailers(movieIds);
+  const {
+    currentIndex,
+    setCurrentIndex,
+    progress,
+    setProgress,
+    handleNext,
+    handlePrev,
+  } = useCarousel(movieIds.length);
+
   const [isMuted, setIsMuted] = useState(true);
 
   const isLargeScreen = useScreenSize();
   const zoomFactor = useVideoZoom(isLargeScreen);
-  const { playerRef, isVideoReady } = useYouTubePlayer(trailerKey, isLargeScreen);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getMovieDetailsWithLogos(movieId);
-      if (data) {
-        setMovieData(data.movie);
-        if (isLargeScreen) setTrailerKey(data.trailerKey);
-      }
-    };
-    fetchData();
-  }, [movieId, isLargeScreen]);
+  const { playerRef, isVideoReady, duration } = useYouTubePlayer(
+    trailers[currentIndex],
+    isLargeScreen,
+    isMuted
+  );
+
+  useVideoProgress(playerRef, duration, setProgress, handleNext);
 
   const handleMuteToggle = () => {
-    if (playerRef.current) {
-      if (isMuted) playerRef.current.unMute();
-      else playerRef.current.mute();
-      setIsMuted(!isMuted);
-    }
+    if (!playerRef.current) return;
+    isMuted ? playerRef.current.unMute() : playerRef.current.mute();
+    setIsMuted(!isMuted);
   };
 
   const truncateText = (text: string, maxLength: number) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
+  const movieData = movies[currentIndex];
+
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden group">
       {/* Background */}
       <div className="absolute top-0 left-0 w-full h-full">
         {movieData && (
@@ -47,6 +63,7 @@ export const HeroBanner = ({ movieId }: HeroBannerProps) => {
             className="w-full h-full object-cover absolute top-0 left-0"
             src={`https://image.tmdb.org/t/p/original${movieData.backdrop_path}`}
             alt={movieData.title}
+            loading="lazy"
             style={{
               opacity: isVideoReady ? 0 : 1,
               transition: "opacity 0.5s ease",
@@ -54,7 +71,8 @@ export const HeroBanner = ({ movieId }: HeroBannerProps) => {
           />
         )}
 
-        {trailerKey && isLargeScreen && (
+        {/* YouTube Player */}
+        {trailers[currentIndex] && isLargeScreen && (
           <div
             className="w-full h-full absolute top-0 left-0"
             style={{
@@ -72,14 +90,39 @@ export const HeroBanner = ({ movieId }: HeroBannerProps) => {
       {/* Gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
 
+      {/* Arrows */}
+      <button
+        onClick={handlePrev}
+        aria-label="Previous movie"
+        className="absolute left-0 top-1/2 -translate-y-1/2 
+             text-zinc-400 hover:text-white 
+             p-3 rounded-full 
+             opacity-100 sm:opacity-0 sm:group-hover:opacity-100 
+             transition-opacity"
+      >
+        <FaChevronLeft size={25} />
+      </button>
+      <button
+        onClick={handleNext}
+        aria-label="Next movie"
+        className="absolute right-0 top-1/2 -translate-y-1/2 
+             text-zinc-400 hover:text-white 
+             p-3 rounded-full 
+             opacity-100 sm:opacity-0 sm:group-hover:opacity-100 
+             transition-opacity"
+      >
+        <FaChevronRight size={25} />
+      </button>
+
       {/* Interface */}
       {movieData && (
-        <div className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-10 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg">
+        <div className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-10 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg text-center sm:text-left flex flex-col items-center sm:items-start">
           {movieData.logo_path && (
             <img
               src={`https://image.tmdb.org/t/p/original${movieData.logo_path}`}
               alt={movieData.title}
               className="max-h-20 sm:max-h-32 w-auto mb-3 sm:mb-4"
+              loading="lazy"
             />
           )}
           <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 text-xs sm:text-sm">
@@ -104,10 +147,49 @@ export const HeroBanner = ({ movieId }: HeroBannerProps) => {
         </div>
       )}
 
+      {/* Indicators */}
+      <div className="absolute bottom-5 w-full flex justify-center gap-3">
+        {movieIds.map((_, i) => (
+          <button
+            key={i}
+            aria-label={`Go to movie ${i + 1}`}
+            className="w-5 h-5 rounded-full relative flex items-center justify-center"
+            onClick={() => setCurrentIndex(i)}
+          >
+            {i === currentIndex ? (
+              <svg className="w-full h-full">
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="7"
+                  stroke="#3f3f46"
+                  strokeWidth="3.5"
+                  fill="transparent"
+                />
+                <circle
+                  cx="50%"
+                  cy="50%"
+                  r="7"
+                  stroke="white"
+                  strokeWidth="3.5"
+                  fill="transparent"
+                  strokeDasharray={44}
+                  strokeDashoffset={44 - (progress / 100) * 44}
+                  style={{ transition: "stroke-dashoffset 0.1s linear" }}
+                />
+              </svg>
+            ) : (
+              <span className="w-3 h-3 bg-zinc-600 rounded-full block"></span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {/* Volume button */}
-      {trailerKey && isVideoReady && isLargeScreen && (
+      {trailers[currentIndex] && isVideoReady && isLargeScreen && (
         <button
           onClick={handleMuteToggle}
+          aria-label="Toggle mute"
           className="absolute bottom-12 sm:bottom-24 right-5 sm:right-10 text-white p-2 sm:p-3 rounded flex hover:bg-zinc-700 transition-colors"
         >
           {isMuted ? (

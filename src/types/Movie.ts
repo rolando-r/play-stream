@@ -11,5 +11,8 @@ export interface Movie {
   release_date: string;
   runtime: number;
   poster_path: string;
+  backdrop_path: string; 
   genres: Genre[];
+  logo_path?: string;
+  adult?: boolean;
 }
