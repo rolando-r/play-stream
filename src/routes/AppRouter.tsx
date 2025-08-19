@@ -1,10 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
-import { HomePage} from '../features/Home/pages';
+import { Routes, Route } from "react-router-dom";
+import { HomePage, MoviesPage, SeriesPage, AnimePage } from "../pages/";
 
 export const AppRouter = () => {
   return (
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/movies" element={<MoviesPage />} />
+      <Route path="/series" element={<SeriesPage />} />
+      <Route path="/anime" element={<AnimePage />} />
+    </Routes>
   );
-}
+};

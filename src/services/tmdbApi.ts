@@ -45,6 +45,18 @@ export const getMovieDetailsWithLogos = async (movieId: number) => {
   }
 };
 
+export const getTrending = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/trending/movie/day?api_key=${API_KEY}`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching trending media:", error);
+    return [];
+  }
+};
+
+
 export const getPopularMovies = async () => {
   try {
     const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`);
@@ -52,6 +64,28 @@ export const getPopularMovies = async () => {
     return data.results || [];
   } catch (error) {
     console.error("Error fetching popular movies:", error);
+    return [];
+  }
+};
+
+export const getPopularSeries = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&language=en-US&page=1`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching popular series:", error);
+    return [];
+  }
+};
+
+export const getPopularAnime = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&language=en-US&with_genres=16&with_original_language=ja&sort_by=popularity.desc&page=1`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching popular anime:", error);
     return [];
   }
 };

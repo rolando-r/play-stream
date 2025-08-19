@@ -1,7 +1,7 @@
-import { HeroBanner } from "../../../components/HeroBanner";
-import { usePopularMovies } from "../../../hooks/";
+import { HeroBanner } from "../../components/HeroBanner";
+import { usePopularMovies } from "../../hooks";
 
-export const HomePage = () => {
+export const MoviesPage = () => {
   const { movieIds, loading, error } = usePopularMovies(5);
 
   if (loading) {

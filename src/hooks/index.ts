@@ -6,3 +6,6 @@ export { useVideoProgress } from './useVideoProgress';
 export { useCarousel } from './useCarousel';
 export { useMoviesWithTrailers } from './useMoviesWithTrailers';
 export { usePopularMovies } from './usePopularMovies';
+export { usePopularSeries } from './usePopularSeries';
+export { usePopularAnimes } from './usePopularAnimes';
+export { useTrending } from './useTrending';
