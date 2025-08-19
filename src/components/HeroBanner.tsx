@@ -116,12 +116,12 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
         <FaChevronRight size={25} />
       </button>
 
-      {/* Interface con animación corta y rápida */}
+      {/* Interface */}
       <AnimatePresence mode="wait">
         {data && (
           <motion.div
             key={currentIndex}
-            className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-10 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg text-center sm:text-left flex flex-col items-center sm:items-start"
+            className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-15 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg text-center sm:text-left flex flex-col items-center sm:items-start"
             initial={{ x: 40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -40, opacity: 0 }}
