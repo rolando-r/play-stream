@@ -6,6 +6,7 @@ import {
   FaVolumeMute,
   FaChevronLeft,
   FaChevronRight,
+  FaPlay
 } from "react-icons/fa";
 import {
   useScreenSize,
@@ -157,7 +158,7 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
 
             <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-5">
               <button className="px-4 sm:px-6 py-1 sm:py-2 bg-white text-black font-bold rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-300 text-xs sm:text-sm">
-                ▶ Watch Now
+                <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" /> Watch Now
               </button>
               <button className="px-3 sm:px-4 py-1 sm:py-2 bg-zinc-800 text-white rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-700 text-xs sm:text-sm">
                 <FaInfoCircle />
