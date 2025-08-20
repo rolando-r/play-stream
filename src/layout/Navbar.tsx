@@ -33,7 +33,7 @@ export const Navbar = () => {
             <Link to="/">
               <img
                 src="/logo.webp"
-                alt="FilmHub"
+                alt="PlayStream"
                 className="h-10 sm:h-14 md:h-16 object-contain"
               />
             </Link>

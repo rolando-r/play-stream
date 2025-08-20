@@ -1,6 +1,6 @@
 import './styles/global.css'
 import { BrowserRouter } from 'react-router-dom';
-import { Navbar } from './layout';
+import { Navbar, Footer } from './layout';
 import { AppRouter } from './routes';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
     <BrowserRouter>
       <Navbar/>
       <AppRouter/>
+      <Footer/>
     </BrowserRouter>
   )
 }
