@@ -14,7 +14,7 @@ export const Carousel: FC<CarouselProps> = ({ title, items }) => {
 
   return (
     <div className="mb-8 relative">
-      <h2 className="text-white text-xl font-semibold mb-4 px-10 md:px-15">{title}</h2>
+      <h2 className="text-white text-xl font-semibold mb-4 px-10 md:px-10">{title}</h2>
 
       {canScrollLeft && (
         <button

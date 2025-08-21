@@ -92,3 +92,31 @@ export const getPopularAnime = async () => {
     return [];
   }
 };
+
+export const getSimilarMovies = async (movieId: number) => {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=en-US&page=1`
+    );
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching recommended movies:", error);
+    return [];
+  }
+};
+
+
+export const getSimilarSeries = async (seriesId: number) => {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/tv/${seriesId}/recommendations?api_key=${API_KEY}&language=en-US&page=1`
+    );
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching recommended series:", error);
+    return [];
+  }
+};
+

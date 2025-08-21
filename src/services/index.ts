@@ -3,3 +3,5 @@ export { getPopularMovies } from './tmdbApi';
 export { getPopularSeries } from './tmdbApi';
 export { getPopularAnime } from './tmdbApi';
 export { getTrending } from './tmdbApi';
+export { getSimilarMovies } from './tmdbApi';
+export { getSimilarSeries } from './tmdbApi';

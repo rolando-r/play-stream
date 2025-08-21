@@ -19,12 +19,14 @@ import {
 import { PreloadImage } from "./PreloadImage";
 
 interface HeroBannerProps {
-  ids: number[];
+  ids?: number[];
+  id?: number;
   mediaType: "movie" | "tv";
 }
 
-export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
-  const { items, trailers } = useContentWithTrailers(ids, mediaType);
+export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
+  const effectiveIds = id ? [id] : ids;
+  const { items, trailers } = useContentWithTrailers(effectiveIds, mediaType);
   const {
     currentIndex,
     setCurrentIndex,
@@ -32,7 +34,7 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
     setProgress,
     handleNext,
     handlePrev,
-  } = useCarousel(ids.length);
+  } = useCarousel(effectiveIds.length);
 
   const [isMuted, setIsMuted] = useState(true);
 
@@ -40,7 +42,7 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
   const zoomFactor = useVideoZoom(isLargeScreen);
 
   const { playerRef, isVideoReady, duration } = useYouTubePlayer(
-    trailers[currentIndex],
+    !id ? trailers[currentIndex] : null,
     isLargeScreen,
     isMuted
   );
@@ -76,7 +78,7 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
         )}
 
         {/* YouTube Player */}
-        {trailers[currentIndex] && isLargeScreen && (
+        {!id && trailers[currentIndex] && isLargeScreen && (
           <div
             className="w-full h-full absolute top-0 left-0 transition-opacity duration-700"
             style={{
@@ -94,28 +96,24 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
 
       {/* Arrows */}
-      <button
-        onClick={handlePrev}
-        aria-label="Previous"
-        className="absolute left-0 top-1/2 -translate-y-1/2 
-             text-zinc-400 hover:text-white 
-             p-3 rounded-full 
-             opacity-100 sm:opacity-0 sm:group-hover:opacity-100 
-             transition-opacity"
-      >
-        <FaChevronLeft size={25} />
-      </button>
-      <button
-        onClick={handleNext}
-        aria-label="Next"
-        className="absolute right-0 top-1/2 -translate-y-1/2 
-             text-zinc-400 hover:text-white 
-             p-3 rounded-full 
-             opacity-100 sm:opacity-0 sm:group-hover:opacity-100 
-             transition-opacity"
-      >
-        <FaChevronRight size={25} />
-      </button>
+      {!id && (
+        <>
+          <button
+            onClick={handlePrev}
+            aria-label="Previous"
+            className="absolute left-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-3 rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+          >
+            <FaChevronLeft size={25} />
+          </button>
+          <button
+            onClick={handleNext}
+            aria-label="Next"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-3 rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+          >
+            <FaChevronRight size={25} />
+          </button>
+        </>
+      )}
 
       {/* Interface */}
       <AnimatePresence mode="wait">
@@ -153,61 +151,82 @@ export const HeroBanner = ({ ids = [], mediaType }: HeroBannerProps) => {
             </div>
 
             <p className="text-[12px] sm:text-sm leading-relaxed sm:leading-relaxed">
-              {truncateText(data.overview, 250)}
+              {id ? truncateText(data.overview, 400) : truncateText(data.overview, 250)}
             </p>
 
             <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-5">
               <button className="px-4 sm:px-6 py-1 sm:py-2 bg-white text-black font-bold rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-300 text-xs sm:text-sm">
                 <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" /> Watch Now
               </button>
-              <button className="px-3 sm:px-4 py-1 sm:py-2 bg-zinc-800 text-white rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-700 text-xs sm:text-sm">
-                <FaInfoCircle />
-              </button>
+              {!id && (
+                <a
+                  href={`/${mediaType}/${data.id}`}
+                  className="px-3 sm:px-4 py-1 sm:py-2 bg-zinc-800 text-white rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-700 text-xs sm:text-sm"
+                >
+                  <FaInfoCircle />
+                </a>
+              )}
             </div>
+
+            {/* Sección de géneros - Solo se muestra si hay un ID */}
+            {id && data.genres && (
+              <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-300">
+                {data.genres.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="bg-zinc-800 rounded px-3 py-1 text-[10px]"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Indicators */}
-      <div className="absolute bottom-5 w-full flex justify-center gap-3">
-        {ids.map((_, i) => (
-          <button
-            key={i}
-            aria-label={`Go to item ${i + 1}`}
-            className="w-5 h-5 rounded-full relative flex items-center justify-center"
-            onClick={() => setCurrentIndex(i)}
-          >
-            {i === currentIndex ? (
-              <svg className="w-full h-full">
-                <circle
-                  cx="50%"
-                  cy="50%"
-                  r="7"
-                  stroke="#3f3f46"
-                  strokeWidth="3.5"
-                  fill="transparent"
-                />
-                <circle
-                  cx="50%"
-                  cy="50%"
-                  r="7"
-                  stroke="white"
-                  strokeWidth="3.5"
-                  fill="transparent"
-                  strokeDasharray={44}
-                  strokeDashoffset={44 - (progress / 100) * 44}
-                  style={{ transition: "stroke-dashoffset 0.1s linear" }}
-                />
-              </svg>
-            ) : (
-              <span className="w-3 h-3 bg-zinc-600 rounded-full block"></span>
-            )}
-          </button>
-        ))}
-      </div>
+      {!id && (
+        <div className="absolute bottom-5 w-full flex justify-center gap-3">
+          {effectiveIds.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to item ${i + 1}`}
+              className="w-5 h-5 rounded-full relative flex items-center justify-center"
+              onClick={() => setCurrentIndex(i)}
+            >
+              {i === currentIndex ? (
+                <svg className="w-full h-full">
+                  <circle
+                    cx="50%"
+                    cy="50%"
+                    r="7"
+                    stroke="#3f3f46"
+                    strokeWidth="3.5"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="50%"
+                    cy="50%"
+                    r="7"
+                    stroke="white"
+                    strokeWidth="3.5"
+                    fill="transparent"
+                    strokeDasharray={44}
+                    strokeDashoffset={44 - (progress / 100) * 44}
+                    style={{ transition: "stroke-dashoffset 0.1s linear" }}
+                  />
+                </svg>
+              ) : (
+                <span className="w-3 h-3 bg-zinc-600 rounded-full block"></span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Volume button */}
-      {trailers[currentIndex] && isVideoReady && isLargeScreen && (
+      {!id && trailers[currentIndex] && isVideoReady && isLargeScreen && (
         <button
           onClick={handleMuteToggle}
           aria-label="Toggle mute"
