@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaInfoCircle,
@@ -29,6 +29,7 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const effectiveIds = id ? [id] : ids;
   const { items, trailers } = useContentWithTrailers(effectiveIds, mediaType);
+
   const {
     currentIndex,
     setCurrentIndex,
@@ -39,6 +40,8 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
   } = useCarousel(effectiveIds.length);
 
   const [isMuted, setIsMuted] = useState(true);
+  const [isImageReady, setIsImageReady] = useState(false);
+  const [displayIndex, setDisplayIndex] = useState(currentIndex);
 
   const isLargeScreen = useScreenSize();
   const zoomFactor = useVideoZoom(isLargeScreen);
@@ -60,7 +63,17 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
   const truncateText = (text: string, maxLength: number) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
-  const data = items[currentIndex];
+  useEffect(() => {
+    setIsImageReady(false);
+  }, [currentIndex, id]);
+
+  useEffect(() => {
+    if (isImageReady || (!trailers[currentIndex] && !id)) {
+      setDisplayIndex(currentIndex);
+    }
+  }, [isImageReady, currentIndex, trailers, id]);
+
+  const data = items[displayIndex];
 
   return (
     <section className="relative w-full h-screen overflow-hidden group">
@@ -68,13 +81,12 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
       <div className="absolute top-0 left-0 w-full h-full">
         {data && (
           <img
-            key={currentIndex}
-            className="w-full h-full object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-500"
-            src={`https://image.tmdb.org/t/p/original${data.backdrop_path}`}
-            alt={data.title || data.name}
-            onLoad={(e) => {
-              (e.currentTarget as HTMLImageElement).style.opacity = "1";
-            }}
+            key={displayIndex}
+            className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-500"
+            src={`https://image.tmdb.org/t/p/original${items[currentIndex].backdrop_path}`}
+            alt={items[currentIndex].title || items[currentIndex].name}
+            onLoad={() => setIsImageReady(true)}
+            style={{ opacity: isImageReady ? 1 : 0 }}
             loading="lazy"
           />
         )}
@@ -119,9 +131,9 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
 
       {/* Interface */}
       <AnimatePresence mode="wait">
-        {data && (
+        {data && (isVideoReady || isImageReady) && (
           <motion.div
-            key={currentIndex}
+            key={displayIndex}
             className="absolute bottom-12 sm:bottom-24 left-0 right-0 sm:left-15 sm:right-auto px-4 sm:px-0 text-white max-w-full sm:max-w-lg text-center sm:text-left flex flex-col items-center sm:items-start"
             initial={{ x: 40, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
