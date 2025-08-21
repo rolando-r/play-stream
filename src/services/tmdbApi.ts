@@ -120,3 +120,14 @@ export const getSimilarSeries = async (seriesId: number) => {
   }
 };
 
+export const getWatchProviders = async (
+  id: number,
+  mediaType: "movie" | "tv"
+) => {
+  if (!id) return {};
+  const res = await fetch(
+    `https://api.themoviedb.org/3/${mediaType}/${id}/watch/providers?api_key=${import.meta.env.VITE_TMDB_API_KEY}`
+  );
+  const data = await res.json();
+  return data.results || {};
+};

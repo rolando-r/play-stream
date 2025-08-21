@@ -17,6 +17,7 @@ import {
   useVideoProgress,
 } from "../hooks";
 import { PreloadImage } from "./PreloadImage";
+import { WatchProvidersModal } from "./WatchProvidersModal";
 
 interface HeroBannerProps {
   ids?: number[];
@@ -25,6 +26,7 @@ interface HeroBannerProps {
 }
 
 export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const effectiveIds = id ? [id] : ids;
   const { items, trailers } = useContentWithTrailers(effectiveIds, mediaType);
   const {
@@ -155,7 +157,11 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
             </p>
 
             <div className="flex gap-2 sm:gap-3 mt-3 sm:mt-5">
-              <button className="px-4 sm:px-6 py-1 sm:py-2 bg-white text-black font-bold rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-300 text-xs sm:text-sm">
+              <button
+                onClick={() => data?.id && setIsModalOpen(true)}
+                disabled={!data?.id}
+                className="px-4 sm:px-6 py-1 sm:py-2 bg-white text-black font-bold rounded flex items-center gap-1 sm:gap-2 hover:bg-zinc-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+              >
                 <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" /> Watch Now
               </button>
               {!id && (
@@ -168,7 +174,6 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
               )}
             </div>
 
-            {/* Sección de géneros - Solo se muestra si hay un ID */}
             {id && data.genres && (
               <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-300">
                 {data.genres.map((genre) => (
@@ -184,6 +189,13 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <WatchProvidersModal
+        movieId={data?.id ?? 0}
+        mediaType={mediaType}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       {/* Indicators */}
       {!id && (
