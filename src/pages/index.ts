@@ -4,3 +4,4 @@ export { SeriesPage } from './Series/SeriesPage';
 export { AnimePage } from './Anime/AnimePage';
 export { MoviesDetail } from './MovieDetail';
 export { SeriesDetail } from './SeriesDetail';
+export { SearchPage } from './Search/SearchPage';

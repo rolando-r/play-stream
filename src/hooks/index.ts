@@ -13,3 +13,4 @@ export { useCarouselScroll } from './useCarouselScroll';
 export { useFilteredPopularMovies } from './useFilteredPopularMovies';
 export { useFilteredPopularSeries } from './useFilteredPopularSeries';
 export { useFilteredPopularAnimes } from './useFilteredPopularAnimes';
+export { useSearch } from './useSearch';

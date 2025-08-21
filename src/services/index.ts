@@ -5,3 +5,6 @@ export { getPopularAnime } from './tmdbApi';
 export { getTrending } from './tmdbApi';
 export { getSimilarMovies } from './tmdbApi';
 export { getSimilarSeries } from './tmdbApi';
+export { searchMulti } from './tmdbApi';
+export { getInitialSearchResults } from './tmdbApi';
+export { getItemImages } from './tmdbApi';

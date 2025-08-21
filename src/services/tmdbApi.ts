@@ -131,3 +131,42 @@ export const getWatchProviders = async (
   const data = await res.json();
   return data.results || {};
 };
+
+export const searchMulti = async (query: string, page: number = 1) => {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/search/multi?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(
+        query
+      )}&page=${page}&include_adult=false`
+    );
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error searching media:", error);
+    return [];
+  }
+};
+
+export const getInitialSearchResults = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/trending/all/day?api_key=${API_KEY}&language=en-US`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching initial search results:", error);
+    return [];
+  }
+};
+
+export const getItemImages = async (item: any) => {
+  try {
+    const type = item.media_type === "tv" ? "tv" : "movie";
+    const res = await fetch(
+      `${BASE_URL}/${type}/${item.id}/images?api_key=${API_KEY}&include_image_language=en,US,null`
+    );
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching images:", err);
+    return null;
+  }
+};

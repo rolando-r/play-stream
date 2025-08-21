@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { menuItems } from "../config/menuItems";
 import { useActiveIndicator } from "../hooks";
+import { Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const { indicatorStyle, menuRefs, location } = useActiveIndicator(menuItems);
@@ -67,11 +68,11 @@ export const Navbar = () => {
 
           {/* Search Icon */}
           <div className="flex justify-center items-center">
-            <Link to="/">
-              <img
-                src="/search.svg"
-                alt="search"
-                className="h-5 sm:h-6 md:h-7 object-contain"
+            <Link to="/search">
+              <Search
+                className="w-7 h-7"
+                strokeWidth={location.pathname === "/search" ? 3 : 2}
+                color={location.pathname === "/search" ? "#fff" : "#d1d5db"}
               />
             </Link>
           </div>
