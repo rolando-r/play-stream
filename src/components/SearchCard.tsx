@@ -6,12 +6,14 @@ export const SearchCard = ({ item }: { item: any }) => (
     to={`/${item.media_type === "movie" ? "movie" : "tv"}/${item.id}`}
     className="relative group"
   >
-    <div className="relative aspect-[4/2] rounded-md overflow-hidden">
-      <img
-        src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
-        alt={item.title || item.name}
-        className="w-full h-full object-cover"
-      />
+    <div className="relative aspect-[4/2] rounded-md">
+      <div className="w-full h-full rounded-md overflow-hidden">
+        <img
+          src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
+          alt={item.title || item.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
       {item.logo_path && (
         <div className="absolute bottom-0 left-0 w-full flex justify-center bg-gradient-to-t from-black/70 via-black/40 to-transparent p-2">
@@ -23,8 +25,8 @@ export const SearchCard = ({ item }: { item: any }) => (
         </div>
       )}
 
-      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="absolute -inset-2 border-2 border-white rounded-md"></div>
+      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute -inset-1 border-1 border-white rounded-md"></div>
       </div>
     </div>
 
