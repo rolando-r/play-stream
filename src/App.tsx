@@ -7,12 +7,17 @@ import { ScrollToTop } from './components/ScrollToTop';
 function App() {
   return (
     <BrowserRouter>
-      <Navbar/>
-      <ScrollToTop/>
-      <AppRouter/>
-      <Footer/>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <ScrollToTop />
+        <main className="flex-grow">
+          <AppRouter />
+        </main>
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }
+
 
 export default App
