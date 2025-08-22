@@ -8,3 +8,4 @@ export { getSimilarSeries } from './tmdbApi';
 export { searchMulti } from './tmdbApi';
 export { getInitialSearchResults } from './tmdbApi';
 export { getItemImages } from './tmdbApi';
+export { getNowPlayingMovies } from './tmdbApi';

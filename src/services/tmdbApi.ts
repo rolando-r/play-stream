@@ -48,9 +48,14 @@ export const getDetailsWithLogos = async (id: number, type: "movie" | "tv") => {
 };
 
 
-export const getTrending = async () => {
+export const getTrending = async (
+  mediaType: "movie" | "tv" = "movie",
+  timeWindow: "day" | "week" = "day"
+) => {
   try {
-    const res = await fetch(`${BASE_URL}/trending/movie/day?api_key=${API_KEY}`);
+    const res = await fetch(
+      `${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${API_KEY}&language=en-US`
+    );
     const data = await res.json();
     return data.results || [];
   } catch (error) {
@@ -58,6 +63,7 @@ export const getTrending = async () => {
     return [];
   }
 };
+
 
 
 export const getPopularMovies = async () => {
@@ -168,5 +174,16 @@ export const getItemImages = async (item: any) => {
   } catch (err) {
     console.error("Error fetching images:", err);
     return null;
+  }
+};
+
+export const getNowPlayingMovies = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching now playing movies:", error);
+    return [];
   }
 };

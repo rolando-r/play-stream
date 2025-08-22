@@ -1,14 +1,22 @@
 import { HeroBanner } from "../../components/HeroBanner";
 import { Carousel } from "../../components/Carousel";
-import { usePopularSeries, useFilteredPopularSeries } from "../../hooks";
+import { useFetchMedia } from "../../hooks";
+import { getTrending, getPopularSeries } from "../../services";
 
 export const SeriesPage = () => {
-  const { seriesIds: trendingIds, loading: trendingLoading, error: trendingError } = usePopularSeries(5);
-  const { seriesIds: popularIds, loading: popularIdsLoading, error: popularIdsError } = usePopularSeries(20);
+  const {
+    items: trendingSeries,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetchMedia(() => getTrending("tv", "day"), 5);
 
-  const { series: popularSeries, loading: popularLoading, error: popularError } = useFilteredPopularSeries(popularIds);
+  const {
+    items: popularSeries,
+    loading: popularLoading,
+    error: popularError,
+  } = useFetchMedia(getPopularSeries, 20);
 
-  if (trendingLoading || popularIdsLoading || popularLoading) {
+  if (trendingLoading || popularLoading) {
     return (
       <div className="flex justify-center items-center h-screen text-white">
         Loading...
@@ -16,18 +24,18 @@ export const SeriesPage = () => {
     );
   }
 
-  if (trendingError || popularIdsError || popularError) {
+  if (trendingError || popularError) {
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
-        Error loading animes
+        Error loading series
       </div>
     );
   }
 
   return (
     <div>
-      <HeroBanner ids={trendingIds} mediaType="tv" />
-      <Carousel title="Trending" items={popularSeries} />
+      <HeroBanner ids={trendingSeries.map((s) => s.id)} mediaType="tv" />
+      <Carousel title="Popular Series" items={popularSeries} />
     </div>
   );
 };

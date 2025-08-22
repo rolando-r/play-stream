@@ -1,14 +1,52 @@
 import { HeroBanner } from "../../components/HeroBanner";
 import { Carousel } from "../../components/Carousel";
-import { useTrending, usePopularMovies, useFilteredPopularMovies } from "../../hooks";
+import {
+  getTrending,
+  getPopularMovies,
+  getPopularSeries,
+  getNowPlayingMovies,
+} from "../../services";
+import { useFetchMedia } from "../../hooks";
 
 export const HomePage = () => {
-  const { movieIds, loading: trendingLoading, error: trendingError } = useTrending(5);
-  const { movieIds: popularIds, loading: popularIdsLoading, error: popularIdsError } = usePopularMovies(20);
+  const {
+    items: trending,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetchMedia(() => getTrending("movie"), 5);
 
-  const { movies: popularMovies, loading: popularLoading, error: popularError } = useFilteredPopularMovies(popularIds);
+  const {
+    items: popularMovies,
+    loading: popularLoading,
+    error: popularError,
+  } = useFetchMedia(getPopularMovies, 20);
 
-  if (trendingLoading || popularIdsLoading || popularLoading) {
+  const {
+    items: popularSeries,
+    loading: seriesLoading,
+    error: seriesError,
+  } = useFetchMedia(getPopularSeries, 20);
+
+  const {
+    items: nowPlayingMovies,
+    loading: nowPlayingLoading,
+    error: nowPlayingError,
+  } = useFetchMedia(getNowPlayingMovies, 20);
+
+  const isLoading = [
+    trendingLoading,
+    popularLoading,
+    seriesLoading,
+    nowPlayingLoading,
+  ].some(Boolean);
+  const hasError = [
+    trendingError,
+    popularError,
+    seriesError,
+    nowPlayingError,
+  ].some(Boolean);
+
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen text-white">
         Loading...
@@ -16,7 +54,7 @@ export const HomePage = () => {
     );
   }
 
-  if (trendingError || popularIdsError || popularError) {
+  if (hasError) {
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
         Error loading movies
@@ -26,8 +64,13 @@ export const HomePage = () => {
 
   return (
     <div>
-      <HeroBanner ids={movieIds} mediaType="movie" />
+      <HeroBanner ids={trending.map((m) => m.id)} mediaType="movie" />
       <Carousel title="Trending" items={popularMovies} />
+      {/* <Carousel title="Top 10 Series" items={popularMovies} /> */}
+      <Carousel title="Popular Series" items={popularSeries} />
+      {/* <Carousel title="Top 10 Movies" items={popularMovies} /> */}
+      <Carousel title="Now Playing" items={nowPlayingMovies} />
+      {/* <Carousel title="Universes" items={popularMovies} /> */}
     </div>
   );
 };
