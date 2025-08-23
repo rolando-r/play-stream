@@ -10,16 +10,21 @@ interface CarouselProps {
 }
 
 export const Carousel: FC<CarouselProps> = ({ title, items }) => {
-  const { scrollRef, canScrollLeft, canScrollRight, scroll } = useCarouselScroll<HTMLDivElement>(items);
+  const { scrollRef, canScrollLeft, canScrollRight, scroll } =
+  useCarouselScroll<HTMLDivElement>(items);
 
   return (
-    <div className="mb-8 relative">
-      <h2 className="text-white text-xl font-semibold mb-4 px-10 md:px-10">{title}</h2>
+    <div className="mb-8 relative group">
+      <h2 className="text-white text-xl font-semibold mb-4 px-10 md:px-10">
+        {title}
+      </h2>
 
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-0 h-full flex items-center justify-center z-10 p-2 bg-black/50 hover:bg-black/70 text-white"
+          className="absolute left-0 top-0 h-full flex items-center justify-center 
+                     z-10 p-2 bg-black/50 hover:bg-black/70 text-white
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
           <FaChevronLeft />
         </button>
@@ -41,7 +46,9 @@ export const Carousel: FC<CarouselProps> = ({ title, items }) => {
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-0 h-full flex items-center justify-center z-10 p-2 bg-black/50 hover:bg-black/70 text-white"
+          className="absolute right-0 top-0 h-full flex items-center justify-center 
+                     z-10 p-2 bg-black/50 hover:bg-black/70 text-white
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
           <FaChevronRight />
         </button>
