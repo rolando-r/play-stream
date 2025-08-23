@@ -1,10 +1,10 @@
 import { HeroBanner } from "../../components/HeroBanner";
-import { Carousel } from "../../components/Carousel";
+import { Carousel, Top10Carousel } from "../../components/Carousel";
 import {
   getTrending,
   getPopularMovies,
   getPopularSeries,
-  getNowPlayingMovies,
+  getNowPlayingMovies
 } from "../../services";
 import { useFetchMedia } from "../../hooks";
 
@@ -13,7 +13,7 @@ export const HomePage = () => {
     items: trending,
     loading: trendingLoading,
     error: trendingError,
-  } = useFetchMedia(() => getTrending("movie"), 5);
+  } = useFetchMedia(() => getTrending("movie"), 10);
 
   const {
     items: popularMovies,
@@ -28,6 +28,12 @@ export const HomePage = () => {
   } = useFetchMedia(getPopularSeries, 20);
 
   const {
+    items: trendingSeries,
+    loading: trendingSeriesLoading,
+    error: trendingSeriesError,
+  } = useFetchMedia(() => getTrending("tv"), 10);
+
+  const {
     items: nowPlayingMovies,
     loading: nowPlayingLoading,
     error: nowPlayingError,
@@ -38,12 +44,14 @@ export const HomePage = () => {
     popularLoading,
     seriesLoading,
     nowPlayingLoading,
+    trendingSeriesLoading,
   ].some(Boolean);
   const hasError = [
     trendingError,
     popularError,
     seriesError,
     nowPlayingError,
+    trendingSeriesError,
   ].some(Boolean);
 
   if (isLoading) {
@@ -64,11 +72,11 @@ export const HomePage = () => {
 
   return (
     <div>
-      <HeroBanner ids={trending.map((m) => m.id)} mediaType="movie" />
+      <HeroBanner ids={trending.slice(0, 5).map((m) => m.id)} mediaType="movie" />
       <Carousel title="Trending" items={popularMovies} />
-      {/* <Carousel title="Top 10 Series" items={popularMovies} /> */}
+      <Top10Carousel title="Top 10 Series Today" items={trendingSeries.slice(0, 10)} />
       <Carousel title="Popular Series" items={popularSeries} />
-      {/* <Carousel title="Top 10 Movies" items={popularMovies} /> */}
+      <Top10Carousel title="Top 10 Movies Today" items={trending.slice(0, 10)} />
       <Carousel title="Now Playing" items={nowPlayingMovies} />
       {/* <Carousel title="Universes" items={popularMovies} /> */}
     </div>
