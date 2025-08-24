@@ -16,15 +16,19 @@ export const getMovieTrailer = async (movieId: number) => {
 
 export const getDetailsWithLogos = async (id: number, type: "movie" | "tv") => {
   try {
-    const [detailsRes, videosRes, imagesRes] = await Promise.all([
+    const [detailsRes, videosRes, imagesRes, externalIdsRes] = await Promise.all([
       fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}&language=en-US`),
       fetch(`${BASE_URL}/${type}/${id}/videos?api_key=${API_KEY}&language=en-US`),
       fetch(`${BASE_URL}/${type}/${id}/images?api_key=${API_KEY}`),
+      type === "tv"
+        ? fetch(`${BASE_URL}/tv/${id}/external_ids?api_key=${API_KEY}`)
+        : null,
     ]);
 
     const details = await detailsRes.json();
     const videos = await videosRes.json();
     const images = await imagesRes.json();
+    const externalIds = type === "tv" ? await externalIdsRes!.json() : {};
 
     const trailerKey =
       videos.results?.find((v: any) => v.type === "Trailer" && v.site === "YouTube")?.key ?? null;
@@ -37,6 +41,7 @@ export const getDetailsWithLogos = async (id: number, type: "movie" | "tv") => {
     return {
       item: {
         ...details,
+        ...externalIds,
         logo_path: logo,
       },
       trailerKey,
@@ -46,7 +51,6 @@ export const getDetailsWithLogos = async (id: number, type: "movie" | "tv") => {
     return null;
   }
 };
-
 
 export const getTrending = async (
   mediaType: "movie" | "tv" = "movie",
@@ -63,8 +67,6 @@ export const getTrending = async (
     return [];
   }
 };
-
-
 
 export const getPopularMovies = async () => {
   try {

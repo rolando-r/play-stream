@@ -9,3 +9,4 @@ export { searchMulti } from './tmdbApi';
 export { getInitialSearchResults } from './tmdbApi';
 export { getItemImages } from './tmdbApi';
 export { getNowPlayingMovies } from './tmdbApi';
+export { getOmdbInfo } from './omdbApi';
