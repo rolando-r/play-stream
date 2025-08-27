@@ -89,8 +89,9 @@ npm run preview
 
 ## 📜 License
 
-This project is licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under **All Rights Reserved**.  
+The source code is provided for viewing purposes only.  
+See the [LICENSE](LICENSE) file for more details.
 
 ---
 
@@ -113,7 +114,7 @@ This README was last updated on **08/25/2025**.
 [tmdb_badge]: https://img.shields.io/badge/TMDB-API-blue?logo=themoviedatabase&style=for-the-badge
 [omdb_badge]: https://img.shields.io/badge/OMDb-API-orange?style=for-the-badge
 
-[license_badge]: https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge
+[license_badge]: https://img.shields.io/badge/License-All%20Rights%20Reserved-red?style=for-the-badge
 
 <!-- URL Variables -->
 [react_url]: https://react.dev
