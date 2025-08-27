@@ -1,4 +1,6 @@
 <div align="center">
+
+  ![Logo](public/icon.webp)
   
   # Play Stream
   
@@ -78,6 +80,10 @@ npm run preview
 ---
 
 ## 📷 Screenshots <a id="screenshots"></a>
+
+![Screenshot 1](.github/images/screenshot1.png)
+![Screenshot 2](.github/images/screenshot2.png)
+![Screenshot 3](.github/images/screenshot3.png)
 
 ---
 
