@@ -29,17 +29,20 @@ export const useCarouselScroll = <T extends HTMLElement>(items: any[]) => {
     const ref = scrollRef.current;
     if (!ref) return;
 
-    const handleResize = () => updateScrollButtons();
+    updateScrollButtons();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateScrollButtons();
+    });
+    resizeObserver.observe(ref);
 
     ref.addEventListener("scroll", updateScrollButtons);
-    window.addEventListener("resize", handleResize);
-
-    const timeout = setTimeout(updateScrollButtons, 100);
+    window.addEventListener("resize", updateScrollButtons);
 
     return () => {
+      resizeObserver.disconnect();
       ref.removeEventListener("scroll", updateScrollButtons);
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(timeout);
+      window.removeEventListener("resize", updateScrollButtons);
     };
   }, [items]);
 
