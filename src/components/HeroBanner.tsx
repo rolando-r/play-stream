@@ -15,6 +15,7 @@ import {
   useCarousel,
   useContentWithTrailers,
   useVideoProgress,
+  usePlayerVisibility,
 } from "../hooks";
 import { PreloadImage } from "./PreloadImage";
 import { WatchProvidersModal } from "./WatchProvidersModal";
@@ -52,6 +53,8 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
     isMuted
   );
 
+  const isPlayerVisible = usePlayerVisibility(isVideoReady);
+
   useVideoProgress(playerRef, duration, setProgress, handleNext);
 
   const handleMuteToggle = () => {
@@ -83,11 +86,12 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
           <img
             key={displayIndex}
             className="w-full h-full object-cover absolute top-0 left-0 transition-opacity duration-500"
-            src={`https://image.tmdb.org/t/p/original${items[currentIndex].backdrop_path}`}
+            src={`https://image.tmdb.org/t/p/w1280${items[currentIndex].backdrop_path}`}
             alt={items[currentIndex].title || items[currentIndex].name}
             onLoad={() => setIsImageReady(true)}
             style={{ opacity: isImageReady ? 1 : 0 }}
-            loading="lazy"
+            fetchPriority="high"
+            loading="eager"
           />
         )}
 
@@ -96,12 +100,13 @@ export const HeroBanner = ({ ids = [], id, mediaType }: HeroBannerProps) => {
           <div
             className="w-full h-full absolute top-0 left-0 transition-opacity duration-700"
             style={{
-              opacity: isVideoReady ? 1 : 0,
+              opacity: isPlayerVisible ? 1 : 0,
               transform: `scale(${zoomFactor})`,
               transformOrigin: "center center",
             }}
           >
-            <div id="yt-player" className="w-full h-full"></div>
+            <div id="yt-player" className="w-full h-full" />
+            <div className="absolute inset-0 z-10" />
           </div>
         )}
       </div>

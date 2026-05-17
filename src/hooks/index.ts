@@ -9,3 +9,4 @@ export { useTrending } from './useTrending';
 export { useCarouselScroll } from './useCarouselScroll';
 export { useSearch } from './useSearch';
 export { useFetchMedia } from './useFetchMedia';
+export { usePlayerVisibility } from './usePlayerVisibility';

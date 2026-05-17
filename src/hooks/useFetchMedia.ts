@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MediaItem } from "../types/MediaItem";
 
 export const useFetchMedia = (
@@ -28,7 +28,7 @@ export const useFetchMedia = (
     return () => {
       isMounted = false;
     };
-  }, [fetchFn, limit]);
+  }, [limit]);
 
   return { items, loading, error };
 };

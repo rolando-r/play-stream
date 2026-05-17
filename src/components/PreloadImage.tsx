@@ -22,8 +22,11 @@ export const PreloadImage = ({ src, alt, className }: PreloadImageProps) => {
 
   return (
     <img
-      src={currentSrc}
+      src={src}
       alt={alt}
+      fetchPriority="low"
+      loading="lazy"
+      onLoad={() => setLoaded(true)}
       className={`${className} transition-opacity duration-200 ${
         loaded ? "opacity-100" : "opacity-0"
       }`}

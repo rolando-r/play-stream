@@ -38,10 +38,15 @@ export const useYouTubePlayer = (
           mute: 1,
           loop: 1,
           playlist: trailerKey,
+
           controls: 0,
+          disablekb: 1,
+          fs: 0,
           modestbranding: 1,
           rel: 0,
           iv_load_policy: 3,
+
+          playsinline: 1,
         },
         events: {
           onReady: (event: any) => {

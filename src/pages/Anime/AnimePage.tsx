@@ -5,18 +5,15 @@ import { getPopularAnime } from "../../services";
 
 export const AnimePage = () => {
   const {
-    items: trendingAnimes,
-    loading: trendingLoading,
-    error: trendingError,
-  } = useFetchMedia(getPopularAnime, 5);
-
-  const {
-    items: popularAnimes,
-    loading: popularLoading,
-    error: popularError,
+    items: animes,
+    loading,
+    error,
   } = useFetchMedia(getPopularAnime, 20);
 
-  if (trendingLoading || popularLoading) {
+  const trendingAnimes = animes.slice(0, 5);
+  const popularAnimes = animes;
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen text-white">
         Loading...
@@ -24,7 +21,7 @@ export const AnimePage = () => {
     );
   }
 
-  if (trendingError || popularError) {
+  if (error) {
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
         Error loading animes

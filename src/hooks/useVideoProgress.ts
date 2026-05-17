@@ -1,13 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const useVideoProgress = (
   playerRef: any,
   duration: number | null,
   setProgress: (val: number) => void,
-  handleNext: () => void
+  handleNext: () => void,
 ) => {
+  const handleNextRef = useRef(handleNext);
+
   useEffect(() => {
-    if (!playerRef.current || !duration) return;
+    handleNextRef.current = handleNext;
+  }, [handleNext]);
+
+  useEffect(() => {
+    if (!duration) return;
 
     const interval = setInterval(() => {
       const currentTime = playerRef.current?.getCurrentTime?.();
@@ -17,11 +23,11 @@ export const useVideoProgress = (
         setProgress(percentage);
 
         if (percentage >= 99) {
-          handleNext();
+          handleNextRef.current();
         }
       }
     }, 500);
 
     return () => clearInterval(interval);
-  }, [playerRef, duration, setProgress, handleNext]);
+  }, [duration]);
 };

@@ -19,7 +19,7 @@ export const useContentWithTrailers = (ids: number[], type: "movie" | "tv") => {
     if (ids.length > 0) {
       fetchData();
     }
-  }, [ids, type]);
+  }, [ids.join(","), type]);
 
   return { items, trailers };
 };
