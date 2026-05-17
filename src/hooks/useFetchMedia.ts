@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { MediaItem } from "../types/MediaItem";
 
 export const useFetchMedia = (

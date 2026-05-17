@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface PreloadImageProps {
   src: string;
@@ -8,17 +8,6 @@ interface PreloadImageProps {
 
 export const PreloadImage = ({ src, alt, className }: PreloadImageProps) => {
   const [loaded, setLoaded] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(src);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-
-    img.onload = () => {
-      setCurrentSrc(src);
-      setLoaded(true);
-    };
-  }, [src]);
 
   return (
     <img
