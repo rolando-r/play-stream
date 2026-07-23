@@ -1,3 +1,7 @@
+import type { MediaItem } from "../types/MediaItem";
+import { filterExplicitContent } from "../helpers/contentFilter";
+import { prioritizeWesternContent } from "../helpers/regionPriority";
+
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -68,33 +72,41 @@ export const getTrending = async (
   }
 };
 
-export const getPopularMovies = async () => {
+export const getPopularMovies = async (): Promise<MediaItem[]> => {
   try {
     const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`);
     const data = await res.json();
-    return data.results || [];
+    return prioritizeWesternContent(data.results || []);
   } catch (error) {
     console.error("Error fetching popular movies:", error);
     return [];
   }
 };
 
-export const getPopularSeries = async () => {
+export const getPopularSeries = async (): Promise<MediaItem[]> => {
   try {
     const res = await fetch(`${BASE_URL}/tv/popular?api_key=${API_KEY}&language=en-US&page=1`);
     const data = await res.json();
-    return data.results || [];
+    return prioritizeWesternContent(data.results || []);
   } catch (error) {
     console.error("Error fetching popular series:", error);
     return [];
   }
 };
 
-export const getPopularAnime = async () => {
+export const getPopularAnime = async (): Promise<MediaItem[]> => {
   try {
-    const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&language=en-US&with_genres=16&with_original_language=ja&sort_by=popularity.desc&page=1`);
-    const data = await res.json();
-    return data.results || [];
+    const pages = await Promise.all(
+      [1, 2, 3].map((page) =>
+        fetch(
+          `${BASE_URL}/discover/tv?api_key=${API_KEY}&language=en-US&with_genres=16&with_original_language=ja&sort_by=popularity.desc&page=${page}&include_adult=false`
+        ).then((res) => res.json())
+      )
+    );
+
+    const results: MediaItem[] = pages.flatMap((data) => data.results || []);
+
+    return filterExplicitContent(results);
   } catch (error) {
     console.error("Error fetching popular anime:", error);
     return [];

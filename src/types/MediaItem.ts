@@ -18,9 +18,11 @@ export interface MediaItem {
 
   overview: string;
   vote_average: number;
+  vote_count?: number;
   poster_path: string;
   backdrop_path: string;
   genres: Genre[];
   logo_path?: string;
   adult?: boolean;
+  original_language?: string;
 }
